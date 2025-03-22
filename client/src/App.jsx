@@ -5,6 +5,8 @@ import Report from "./pages/Report";
 import Navbar from "./components/Navbar";
 import NotFound from "./pages/NotFound";
 import AddTransaction from "./pages/AddTransaction";
+import LoginSignup from "./pages/LoginSignup";
+import { useState } from "react";
 
 function App() {
   return (
@@ -17,6 +19,11 @@ function App() {
             <Route path="/transaction" element={<Transaction />} />
             <Route path="/report" element={<Report />} />
             <Route path="/add-transaction" element={<AddTransaction />} />
+            <Route path="/login" element={<LoginSignup type="login" />}></Route>
+            <Route
+              path="/signup"
+              element={<LoginSignup type="signup" />}
+            ></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

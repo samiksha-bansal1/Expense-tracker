@@ -42,8 +42,12 @@ function Dashboard() {
   const [maxExpense, setMaxExpense] = useState(0);
   const navigate = useNavigate();
   useEffect(() => {
+    // const token = localStorage.getItem("token");
+    // console.log(token);
     axios
-      .get("http://localhost:9000/get-all-transactions")
+      .get("http://localhost:9000/transaction/get-all-transactions", {
+        withCredentials: true,
+      })
       .then((res) => {
         // console.log(res.data.transactions);
         // existingTransactions = res.data.transactions;
@@ -85,7 +89,7 @@ function Dashboard() {
     setBalance(income - expense);
     setCategoryData(categoryBreakDown);
     setMaxExpense(highestExpense);
-    console.log(totalIncome, totalExpense, balance);
+    // console.log(totalIncome, totalExpense, balance);
   }, [transactions]);
 
   const chartData = {

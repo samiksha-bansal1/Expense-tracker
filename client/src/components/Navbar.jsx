@@ -20,12 +20,17 @@ function Navbar() {
       console.log(error);
     }
   };
-
+  const handleLogin = () => {
+    navigate("/login");
+  };
   async function handleReset() {
     // localStorage.clear();
     try {
       const res = await axios.delete(
-        "http://localhost:9000/delete-all-transactions"
+        "http://localhost:9000/transaction/delete-all-transactions",
+        {
+          withCredentials: true,
+        }
       );
       alert(res.data.message);
       navigate(0);
@@ -59,6 +64,11 @@ function Navbar() {
         <li>
           <div className="reset-btn" onClick={handleReset}>
             🔄 Reset
+          </div>
+        </li>
+        <li>
+          <div className="reset-btn" onClick={handleLogin}>
+            🔐 Login
           </div>
         </li>
       </ul>

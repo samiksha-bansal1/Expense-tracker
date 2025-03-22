@@ -12,9 +12,11 @@ function Transaction() {
     //   JSON.parse(localStorage.getItem("transactions")) || [];
     // setTransaction(existingTransactions);
     axios
-      .get("http://localhost:9000/get-all-transactions")
+      .get("http://localhost:9000/transaction/get-all-transactions", {
+        withCredentials: true,
+      })
       .then((res) => {
-        console.log(res.data.transactions);
+        // console.log(res.data.transactions);
         // storedTransactions = res.data.transactions;
         setTransaction(res.data.transactions);
       })
@@ -43,7 +45,10 @@ function Transaction() {
     try {
       const toDeleteTxn = transaction[index];
       const res = await axios.delete(
-        `http://localhost:9000/delete-transaction/${toDeleteTxn._id}`
+        `http://localhost:9000/transaction/delete-transaction/${toDeleteTxn._id}`,
+        {
+          withCredentials: true,
+        }
       );
 
       const updatedTransactions = transaction.filter((data, i) => i !== index);

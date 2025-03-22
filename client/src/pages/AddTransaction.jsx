@@ -77,14 +77,24 @@ function AddTransaction() {
         console.log(editIndex);
         //update transaction
         await axios.put(
-          `http://localhost:9000/update-transaction/${editIndex}`,
-          currentTransaction
+          `http://localhost:9000/transaction/update-transaction/${editIndex}`,
+          currentTransaction,
+          {
+            withCredentials: true,
+          }
         );
         alert("Transaction updated succesfully");
       } else {
         await axios.post(
-          "http://localhost:9000/add-transaction",
-          currentTransaction
+          "http://localhost:9000/transaction/add-transaction",
+          currentTransaction,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json", // Ensure JSON format
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Include auth token if needed
+            },
+          }
         );
         alert("Transaction added succesfully");
       }

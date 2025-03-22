@@ -35,9 +35,11 @@ function Report() {
   useEffect(() => {
     let storedTransactions = [];
     axios
-      .get("http://localhost:9000/get-all-transactions")
+      .get("http://localhost:9000/transaction/get-all-transactions", {
+        withCredentials: true,
+      })
       .then((res) => {
-        console.log(res.data.transactions);
+        // console.log(res.data.transactions);
         // storedTransactions = res.data.transactions;
         setTransactions(res.data.transactions);
       })
