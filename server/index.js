@@ -1,11 +1,22 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const { connectMongoDB } = require("./connection");
 const transactionRoute = require("./routes/transactions");
+const userRoute = require("./routes/user");
+const {
+  checkForAuthenticationInCookie,
+} = require("./middlewares/authentication");
 
 const app = express();
 const PORT = 9000;
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 const URL = "mongodb://127.0.0.1:27017/expense-tracker";
 
 //mongo db connection
@@ -17,16 +28,16 @@ connectMongoDB(URL)
     console.log("Error in Mongo DB connection", err);
   });
 
-app.get("/", (req, res) => {
-  //   console.log(req);
-  res.send("server started");
-});
-
+//middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-app.use("/", transactionRoute);
+//routes
+app.use("/user", userRoute);
+app.use("/transaction", checkForAuthenticationInCookie, transactionRoute);
 
+//server
 app.listen(PORT, () => {
   console.log("server started at PORT", PORT);
 });
