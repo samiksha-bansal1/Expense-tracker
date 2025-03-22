@@ -7,27 +7,36 @@ import NotFound from "./pages/NotFound";
 import AddTransaction from "./pages/AddTransaction";
 import LoginSignup from "./pages/LoginSignup";
 import { useState } from "react";
+import { AuthProvider } from "./AuthContext";
+import { TransactionProvider } from "./TransactionContext";
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <div>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/transaction" element={<Transaction />} />
-            <Route path="/report" element={<Report />} />
-            <Route path="/add-transaction" element={<AddTransaction />} />
-            <Route path="/login" element={<LoginSignup type="login" />}></Route>
-            <Route
-              path="/signup"
-              element={<LoginSignup type="signup" />}
-            ></Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <AuthProvider>
+        <TransactionProvider>
+          <BrowserRouter>
+            <div>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/transaction" element={<Transaction />} />
+                <Route path="/report" element={<Report />} />
+                <Route path="/add-transaction" element={<AddTransaction />} />
+                <Route
+                  path="/login"
+                  element={<LoginSignup type="login" />}
+                ></Route>
+                <Route
+                  path="/signup"
+                  element={<LoginSignup type="signup" />}
+                ></Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+          </BrowserRouter>
+        </TransactionProvider>
+      </AuthProvider>
     </>
   );
 }

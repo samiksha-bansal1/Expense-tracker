@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../AuthContext";
 import styles from "./LoginSignup.module.css";
 
 const LoginSignup = () => {
@@ -10,6 +11,7 @@ const LoginSignup = () => {
     email: "",
     password: "",
   });
+  const { login, signin } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,26 +19,42 @@ const LoginSignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = isLogin
-      ? "http://localhost:9000/user/login"
-      : "http://localhost:9000/user/signin";
+    // const url = isLogin
+    //   ? "http://localhost:9000/user/login"
+    //   : "http://localhost:9000/user/signin";
+    // try {
+    //   const response = await axios.post(url, formData, {
+    //     withCredentials: true,
+    //   });
+    //   // console.log("Success:", response.data);
+    //   alert("✅ Success: Login successfull");
+    //   if (isLogin) {
+    //     navigate("/");
+    //   } else {
+    //     setIsLogin(true);
+    //     navigate("/login");
+    //   }
+    // } catch (error) {
+    //   const errorMessage = error.response
+    //     ? error.response.data.message
+    //     : error.message;
+    //   alert("❌ Error: " + errorMessage);
+    // }
+
     try {
-      const response = await axios.post(url, formData, {
-        withCredentials: true,
-      });
-      // console.log("Success:", response.data);
-      alert("✅ Success: Login successfull");
       if (isLogin) {
+        await login(formData.email, formData.password);
         navigate("/");
       } else {
+        await signin(formData.name, formData.email, formData.password);
         setIsLogin(true);
         navigate("/login");
       }
     } catch (error) {
-      const errorMessage = error.response
-        ? error.response.data.message
-        : error.message;
-      alert("❌ Error: " + errorMessage);
+      alert(
+        "❌ Error: " +
+          (error.response ? error.response.data.message : error.message)
+      );
     }
   };
 
@@ -48,7 +66,7 @@ const LoginSignup = () => {
           {!isLogin && (
             <div className={styles.inputGroup}>
               <label className={styles.label} htmlFor="name">
-                Username
+                Name
               </label>
               <input
                 id="name"

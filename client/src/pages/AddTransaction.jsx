@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useTransaction } from "../TransactionContext";
+
 import styles from "./AddTransaction.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -12,6 +14,7 @@ function AddTransaction() {
   const [editIndex, setEditIndex] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const { handleAddTransaction, handleUpdateTransaction } = useTransaction();
   function handleOnAmountChange(e) {
     // console.log(e.target.value);
     setAmount(e.target.value);
@@ -45,75 +48,27 @@ function AddTransaction() {
       setEditIndex(transaction._id);
     }
   }, [location.state]);
-
   async function handleSubmitForm(e) {
-    // e.preventDefault();
+    e.preventDefault();
     if (!amount || !category || !date) {
       return alert("All fields are required");
     }
-
-    // console.log(type, amount, date, description, category);
-
-    // const existingTransactions =
-    //   JSON.parse(localStorage.getItem("transactions")) || [];
-
-    const currentTransaction = {
-      type: type,
+    const transactionData = {
+      type,
       amount: parseFloat(amount),
-      description: description,
-      category: category,
-      date: date,
+      description,
+      category,
+      date,
     };
-
-    // let newTransactions;
-    // if (editIndex == null) {
-    //   newTransactions = [...transactions, currentTransaction];
-    // } else {
-    //   newTransactions = [...transactions];
-    //   newTransactions[editIndex] = currentTransaction;
-    // }
-    try {
-      if (editIndex !== null) {
-        console.log(editIndex);
-        //update transaction
-        await axios.put(
-          `http://localhost:9000/transaction/update-transaction/${editIndex}`,
-          currentTransaction,
-          {
-            withCredentials: true,
-          }
-        );
-        alert("Transaction updated succesfully");
-      } else {
-        await axios.post(
-          "http://localhost:9000/transaction/add-transaction",
-          currentTransaction,
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json", // Ensure JSON format
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // Include auth token if needed
-            },
-          }
-        );
-        alert("Transaction added succesfully");
-      }
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-      alert("Failed to save transaction");
+    let success;
+    if (editIndex !== null) {
+      success = await handleUpdateTransaction(editIndex, transactionData);
+    } else {
+      success = await handleAddTransaction(transactionData);
     }
-    // setTransactions(newTransactions);
-    // console.log(currentTransaction);
-    // console.log(existingTransactions);
-    // console.log(newTransactions);
 
-    // localStorage.setItem("transactions", JSON.stringify(newTransactions));
-    // if (editIndex !== null) {
-    //   alert(`${type} updated successfully`);
-    // } else {
-    //   alert(`${type} added successfully`);
-    // }
+    if (success) navigate("/");
+
     setAmount("");
     setCategory("");
     setDate("");
@@ -121,6 +76,86 @@ function AddTransaction() {
     setType("Expense");
     setEditIndex(null);
   }
+  // async function handleSubmitForm(e) {
+  //   // e.preventDefault();
+  //   if (!amount || !category || !date) {
+  //     return alert("All fields are required");
+  //   }
+
+  //   // console.log(type, amount, date, description, category);
+
+  //   // const existingTransactions =
+  //   //   JSON.parse(localStorage.getItem("transactions")) || [];
+
+  //   const currentTransaction = {
+  //     type: type,
+  //     amount: parseFloat(amount),
+  //     description: description,
+  //     category: category,
+  //     date: date,
+  //   };
+
+  //   // let newTransactions;
+  //   // if (editIndex == null) {
+  //   //   newTransactions = [...transactions, currentTransaction];
+  //   // } else {
+  //   //   newTransactions = [...transactions];
+  //   //   newTransactions[editIndex] = currentTransaction;
+  //   // }
+  //   try {
+  //     if (editIndex !== null) {
+  //       console.log(editIndex);
+  //       //update transaction
+  //       await axios.put(
+  //         `http://localhost:9000/transaction/update-transaction/${editIndex}`,
+  //         currentTransaction,
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
+  //       alert("Transaction updated succesfully");
+  //     } else {
+  //       await axios.post(
+  //         "http://localhost:9000/transaction/add-transaction",
+  //         currentTransaction,
+  //         {
+  //           withCredentials: true,
+  //           headers: {
+  //             "Content-Type": "application/json", // Ensure JSON format
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`, // Include auth token if needed
+  //           },
+  //         }
+  //       );
+  //       alert("Transaction added succesfully");
+  //     }
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.log(err.response.data.message);
+  //     if (err.response.data.message == "Unauthorized: No Token Provided") {
+  //       alert("Login to save transaction");
+  //       navigate("/login");
+  //     } else {
+  //       alert("Failed to save transaction");
+  //     }
+  //   }
+  //   // setTransactions(newTransactions);
+  //   // console.log(currentTransaction);
+  //   // console.log(existingTransactions);
+  //   // console.log(newTransactions);
+
+  //   // localStorage.setItem("transactions", JSON.stringify(newTransactions));
+  //   // if (editIndex !== null) {
+  //   //   alert(`${type} updated successfully`);
+  //   // } else {
+  //   //   alert(`${type} added successfully`);
+  //   // }
+  //   setAmount("");
+  //   setCategory("");
+  //   setDate("");
+  //   setDescription("");
+  //   setType("Expense");
+  //   setEditIndex(null);
+  // }
 
   return (
     <div className={styles["add-transaction-container"]}>
