@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "./AuthContext";
+import API_BASE_URL from "../config";
 
 const TransactionContext = createContext();
 
@@ -37,7 +38,7 @@ export const TransactionProvider = ({ children }) => {
   const fetchTransactions = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9000/transaction/get-all-transactions",
+        `${API_BASE_URL}/transaction/get-all-transactions`,
         {
           withCredentials: true,
         }
@@ -90,7 +91,7 @@ export const TransactionProvider = ({ children }) => {
   const handleDelete = async (txnId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:9000/transaction/delete-transaction/${txnId}`,
+        `${API_BASE_URL}/transaction/delete-transaction/${txnId}`,
         {
           withCredentials: true,
         }
@@ -105,7 +106,7 @@ export const TransactionProvider = ({ children }) => {
   const handleAddTransaction = async (transactionData) => {
     try {
       await axios.post(
-        "http://localhost:9000/transaction/add-transaction",
+        `${API_BASE_URL}/transaction/add-transaction`,
         transactionData,
         {
           withCredentials: true,
@@ -131,7 +132,7 @@ export const TransactionProvider = ({ children }) => {
   const handleUpdateTransaction = async (transactionId, updatedData) => {
     try {
       await axios.put(
-        `http://localhost:9000/transaction/update-transaction/${transactionId}`,
+        `${API_BASE_URL}/transaction/update-transaction/${transactionId}`,
         updatedData,
         {
           withCredentials: true,
@@ -150,7 +151,7 @@ export const TransactionProvider = ({ children }) => {
   const handleReset = async () => {
     try {
       const res = await axios.delete(
-        "http://localhost:9000/transaction/delete-all-transactions",
+        `${API_BASE_URL}/transaction/delete-all-transactions`,
         {
           withCredentials: true,
         }

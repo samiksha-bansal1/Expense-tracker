@@ -9,15 +9,16 @@ const {
 } = require("./middlewares/authentication");
 
 const app = express();
-const PORT = 9000;
+const PORT = process.env.PORT || 9000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [process.env.CLIENT_URL || "http://localhost:5173"],
     credentials: true,
   })
 );
-const URL = "mongodb://127.0.0.1:27017/expense-tracker";
+const URL =
+  process.env.MONGO_URI || "mongodb://127.0.0.1:27017/expense-tracker";
 
 //mongo db connection
 connectMongoDB(URL)

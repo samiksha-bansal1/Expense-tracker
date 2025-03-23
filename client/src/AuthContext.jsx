@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "../config";
 
 const AuthContext = createContext();
 
@@ -10,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserDetails = async () => {
     try {
-      const { data } = await axios.get("http://localhost:9000/user/details");
+      const { data } = await axios.get(`${API_BASE_URL}/user/details`);
       setUser(data);
     } catch (error) {
       console.log(error);
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post("http://localhost:9000/user/login", {
+      const { data } = await axios.post(`${API_BASE_URL}/user/login`, {
         email,
         password,
       });
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   const signin = async (name, email, password) => {
     try {
-      const { data } = await axios.post("http://localhost:9000/user/signin", {
+      const { data } = await axios.post(`${API_BASE_URL}/user/signin`, {
         name,
         email,
         password,
@@ -52,7 +53,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post("http://localhost:9000/user/logout");
+      await axios.post(`${API_BASE_URL}/user/logout`);
       setUser(null);
     } catch (err) {
       console.log(err);
