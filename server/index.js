@@ -11,12 +11,20 @@ const {
 const app = express();
 const PORT = process.env.PORT || 9000;
 
-app.use(
-  cors({
-    origin: [process.env.CLIENT_URL || "http://localhost:5173"],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: "https://expense-tracker-client-eta.vercel.app", // Frontend URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Enable cookies and other credentials
+};
+
+app.use(cors(corsOptions));
+
+// app.use(
+//   cors({
+//     origin: [process.env.CLIENT_URL || "http://localhost:5173"],
+//     credentials: true,
+//   })
+// );
 
 // const allowedOrigins = ["https://expense-tracker-client-eta.vercel.app"];
 
