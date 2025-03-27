@@ -11,12 +11,25 @@ const {
 const app = express();
 const PORT = process.env.PORT || 9000;
 
+// app.use(
+//   cors({
+//     origin: [process.env.CLIENT_URL || "http://localhost:5173"],
+//     credentials: true,
+//   })
+// );
+
+const allowedOrigins = ["https://expense-tracker-client-eta.vercel.app"];
+
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL || "http://localhost:5173"],
+    origin: allowedOrigins,
+    methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
 );
+
+app.options("*", cors());
+
 const URL =
   process.env.MONGO_URI || "mongodb://127.0.0.1:27017/expense-tracker";
 
