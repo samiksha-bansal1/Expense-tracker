@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
         email,
         password,
       });
-      consolce.log(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
