@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import "./Report.css";
 import NoTransactions from "../components/NoTransactions";
+import API_BASE_URL from "../../config";
 
 ChartJS.register(
   ArcElement,
@@ -35,7 +36,7 @@ function Report() {
   useEffect(() => {
     let storedTransactions = [];
     axios
-      .get("http://localhost:9000/transaction/get-all-transactions", {
+      .get(`${API_BASE_URL}/transaction/get-all-transactions`, {
         withCredentials: true,
       })
       .then((res) => {
