@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "./AuthContext";
 import API_BASE_URL from "../config";
 
+axios.defaults.withCredentials = true;
 const TransactionContext = createContext();
 
 export const TransactionProvider = ({ children }) => {
