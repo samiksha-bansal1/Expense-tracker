@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
         password,
       });
       console.log(data);
-      fetchUserDetails();
+      await fetchUserDetails();
       console.log(user);
     } catch (err) {
       console.log(err);
