@@ -102,7 +102,7 @@ function Navbar() {
             className="reset-btn"
             onClick={() => {
               handleReset();
-              navigate(0);
+              navigate("/");
             }}
           >
             🔄 Reset
